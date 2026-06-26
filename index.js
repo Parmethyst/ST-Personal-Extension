@@ -116,15 +116,15 @@ async function loadSettings() {
 //   return userText;
 // }
 
-async function generateTextWithPrompt(prompt_string) {
-  const result = await generateQuietPrompt({
-    prompt_string,
-  });
-}
+// async function generateTextWithPrompt(prompt_string) {
+//   const result = await generateQuietPrompt({
+//     prompt_string,
+//   });
+// }
 
-async function onDebugFunction() {
-  generateTextWithPrompt("Tell me a joke")
-}
+// async function onDebugFunction() {
+//   generateTextWithPrompt("Tell me a joke")
+// }
 
 //   // Helper to inject event prompts into chat
 //   injectPrompt(eventType, eventDescription) {
@@ -148,7 +148,7 @@ jQuery(async () => {
   // These are examples of listening for events
   // $("#my_button").on("click", onButtonClick);
   // $("#example_setting").on("input", onExampleInput);
-  $("debug_button").on("click", onDebugFunction);
+  //$("debug_button").on("click", onDebugFunction);
   // Load settings when starting things up (if you have any)
   loadSettings();
 });
