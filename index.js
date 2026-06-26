@@ -106,13 +106,13 @@ function onButtonClick() {
 //   return userText;
 // }
 
-function generateTextWithPrompt(prompt_string) {
+async function generateTextWithPrompt(prompt_string) {
   const result = await generateQuietPrompt({
     prompt_string,
   });
 }
 
-function onDebugFunction() {
+async function onDebugFunction() {
   generateTextWithPrompt("Tell me a joke")
 }
 
