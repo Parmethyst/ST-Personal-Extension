@@ -114,6 +114,9 @@ async function generateTextWithPrompt(prompt_string) {
 
 async function onDebugFunction() {
   generateTextWithPrompt("Tell me a joke")
+  toastr.info(
+    "A popup appeared because you clicked the button!"
+  );
 }
 
 //   // Helper to inject event prompts into chat
