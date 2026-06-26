@@ -41,7 +41,7 @@ async function loadSettings() {
   }
 
   // Updating settings in the UI
-  $("#example_setting").prop("checked", extension_settings[extensionName].example_setting).trigger("input");
+  //$("#example_setting").prop("checked", extension_settings[extensionName].example_setting).trigger("input");
 }
 
 // // Start a Pomodoro work session
