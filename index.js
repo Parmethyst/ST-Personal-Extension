@@ -141,7 +141,7 @@ jQuery(async () => {
 
   // $("#my_button").on("click", onButtonClick);
   // $("#example_setting").on("input", onExampleInput);
-  $("debug_button").on("click", onDebugFunction);
+  $("#debug_button").on("click", onDebugFunction);
   // Load settings when starting things up (if you have any)
   loadSettings();
 });
