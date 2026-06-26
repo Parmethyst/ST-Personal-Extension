@@ -109,8 +109,7 @@ function onButtonClick() {
 // }
 
 async function generateTextWithPrompt(prompt_string) {
-  sendMessageAs('', `${getContext().name2}\n${prompt_string}`);
-  promptQuietForLoudResponse(sendAs, '');
+  sendLoud('char', prompt_string)
 }
 
 async function onDebugFunction() {
@@ -118,6 +117,28 @@ async function onDebugFunction() {
   toastr.info(
     "A popup appeared because you clicked the button!"
   );
+}
+
+function sendLoud(sendAs, prompt) {
+    if (sendAs === 'user') {
+        prompt = substituteParams(prompt);
+
+        $('#send_textarea').val(prompt);
+
+        // Set the focus back to the textarea
+        $('#send_textarea').focus();
+
+        $('#send_but').trigger('click');
+    } else if (sendAs === 'char') {
+        sendMessageAs('', `${getContext().name2}\n${prompt}`);
+        promptQuietForLoudResponse(sendAs, '');
+    } else if (sendAs === 'sys') {
+        sendNarratorMessage('', prompt);
+        promptQuietForLoudResponse(sendAs, '');
+    }
+    else {
+        console.error(`Unknown sendAs value: ${sendAs}`);
+    }
 }
 
 //   // Helper to inject event prompts into chat
