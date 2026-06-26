@@ -109,9 +109,7 @@ function onButtonClick() {
 // }
 
 async function generateTextWithPrompt(prompt_string) {
-  const result = await generateQuietPrompt({
-    prompt_string,
-  });
+  const result = await generateQuietPrompt(prompt_string, true);
 }
 
 async function onDebugFunction() {
