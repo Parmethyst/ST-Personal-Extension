@@ -12,6 +12,11 @@
                 <label for="pomodoro_enabled">Enabled</label>
             </div>
             <div class="flex-container">
+                <input id="start_pomodoro" class="menu_button" type="submit" value="Start" />
+                <input id="pause_pomodoro" class="menu_button" type="submit" value="Pause" />
+                <input id="stop_pomodoro" class="menu_button" type="submit" value="Stop" />
+            </div>
+            <div class="flex-container">
                 <input id="pomodoro_session" class="text_pole widthUnset" type="number" min="0" max="10" step="1"
                     title="The number of times the pomodoro session (Work + Break) will be run." />
                 <label for="pomodoro_session">Pomodoro Sessions</label>
@@ -66,7 +71,12 @@
                     title="Indicates if the idle prompting should be included in context. (Sends as user)" />
                 <label for="include_prompt">Include Idle Prompt</label>
             </div>
-
+            <div class="flex-container">
+                <input id="save_settings" class="menu_button" type="submit" value="Save Settings" />
+            </div>
+            <div class="flex-container">
+                <input id="debug_button" class="menu_button" type="submit" value="Debug Button" />
+            </div>
             <hr class="sysHR" />
         </div>
     </div>
