@@ -7,6 +7,8 @@ import { extension_settings, getContext, loadExtensionSettings } from "../../../
 //You'll likely need to import some other functions from the main script
 import { saveSettingsDebounced } from "../../../../script.js";
 
+const { generateQuietPrompt } = SillyTavern.getContext();
+
 // Keep track of where your extension is located, name should match repo name
 const extensionName = "ST-Personal-Extension";
 const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
