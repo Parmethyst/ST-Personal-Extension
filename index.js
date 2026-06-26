@@ -109,7 +109,7 @@ function onButtonClick() {
 // }
 
 async function generateTextWithPrompt(prompt_string) {
-  sendLoud('char', prompt_string)
+  sendLoud('sys', prompt_string)
 }
 
 async function onDebugFunction() {
