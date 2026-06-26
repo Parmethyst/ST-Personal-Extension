@@ -146,8 +146,8 @@ jQuery(async () => {
   $("#extensions_settings").append(settingsHtml);
 
   // These are examples of listening for events
-  $("#my_button").on("click", onButtonClick);
-  $("#example_setting").on("input", onExampleInput);
+  // $("#my_button").on("click", onButtonClick);
+  // $("#example_setting").on("input", onExampleInput);
   $("debug_button").on("click", onDebugFunction);
   // Load settings when starting things up (if you have any)
   loadSettings();
