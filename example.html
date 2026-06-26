@@ -1,22 +1,69 @@
-<!-- You might want to add additional HTML elements to ST. 
-    It's good practice to separate it out from your code -->
-<div class="example-extension-settings">
+<div class="pomodoro-settings">
     <div class="inline-drawer">
-        <div class="inline-drawer-toggle inline-drawer-header">
-            <b>Extension Example</b>
+        <div class="inline-drawer-toggle inline-drawer-header" title="Personal pomodoro settings.">
+            <b>Personal Pomodoro</b>
             <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
         </div>
-        <div class="inline-drawer-content">
-            <div class="example-extension_block flex-container">
-                <input id="start_pomodoro" class="menu_button" type="submit" value="Start" />
-                <input id="pause_pomodoro" class="menu_button" type="submit" value="Pause" />
-                <input id="stop_pomodoro" class="menu_button" type="submit" value="Stop" />
-                
-            </div>
 
-            <div class="example-extension_block flex-container">
-                <input id="example_setting" type="checkbox" />
-                <label for="example_setting">This is an example</label>
+        <div class="inline-drawer-content">
+            <div class="flex-container">
+                <input id="pomodoro_enabled" type="checkbox"
+                    title="Toggle to enable or disable the Pomodoro feature." />
+                <label for="pomodoro_enabled">Enabled</label>
+            </div>
+            <div class="flex-container">
+                <input id="pomodoro_session" class="text_pole widthUnset" type="number" min="0" max="10" step="1"
+                    title="The number of times the pomodoro session (Work + Break) will be run." />
+                <label for="pomodoro_session">Pomodoro Sessions</label>
+            </div>
+            <div class="flex-container" style="display: none;">
+                <input id="pomodoro_work_min" class="text_pole widthUnset" type="number" min="0" max="60" step="1"
+                    title="Work duration in minutes." />
+                <label for="pomodoro_work_min">Work Length (minutes)</label>
+            </div>
+            <div class="flex-container">
+                <input id="pomodoro_break_min" class="text_pole widthUnset" type="number" min="0" max="30" step="1"
+                    title="Break duration in minutes." />
+                <label for="pomodoro_break_min">Break Length (minutes)</label>
+            </div>
+            <div class="flex-container">
+                <label for="start_work_prompt">Start Work Session Prompt</label>
+                <textarea id="start_work_prompt" class="text_pole textarea_compact" rows="6"
+                    title="The prompts to be sent when a work session started."></textarea>
+            </div>
+            <div class="flex-container">
+                <label for="break_prompt">Break Time Prompt</label>
+                <textarea id="break_prompt" class="text_pole textarea_compact" rows="6"
+                    title="The prompts to be sent when break started."></textarea>
+            </div>
+            <div class="flex-container">
+                <label for="session_finished_prompt">Pomodoro Finished Prompt</label>
+                <textarea id="session_finished_prompt" class="text_pole textarea_compact" rows="6"
+                    title="The prompt to be sent on completed pomodoro."></textarea>
+            </div>
+            <div class="flex-container">
+                <input id="discipline_toggle" type="checkbox"
+                    title="Make responses when pomodoro is running to be strict." />
+                <label for="discipline_toggle">Enable Discipline Mode</label>
+            </div>
+            <div class="flex-container">
+                <label for="discipline_prompt">Discipline Prompt</label>
+                <textarea id="discipline_prompt" class="text_pole textarea_compact" rows="6"
+                    title="Prompt to send to AI when they chat with AI assuming distracted."></textarea>
+            </div>
+            <div class="flex-container">
+                <label for="discipline_level">Discipline Level</label>
+                <select id="discipline_level" class="text_pole"
+                    title="Determines how strict is the discipline mode.">
+                    <option value="gentle">Gentle</option>
+                    <option value="firm">Firm</option>
+                    <option value="strict">Strict</option>
+                </select>
+            </div>
+            <div class="flex-container">
+                <input id="include_prompt" type="checkbox"
+                    title="Indicates if the idle prompting should be included in context. (Sends as user)" />
+                <label for="include_prompt">Include Idle Prompt</label>
             </div>
 
             <hr class="sysHR" />
