@@ -3,7 +3,7 @@
 
 //You'll likely need to import extension_settings, getContext, and loadExtensionSettings from extensions.js
 import { extension_settings, getContext, loadExtensionSettings } from "../../../extensions.js";
-
+import { promptQuietForLoudResponse, sendMessageAs, sendNarratorMessage } from '../../../slash-commands.js';
 //You'll likely need to import some other functions from the main script
 import { saveSettingsDebounced } from "../../../../script.js";
 
@@ -109,7 +109,8 @@ function onButtonClick() {
 // }
 
 async function generateTextWithPrompt(prompt_string) {
-  const result = await generateQuietPrompt(prompt_string, true);
+  sendMessageAs('', `${getContext().name2}\n${prompt_string}`);
+  promptQuietForLoudResponse(sendAs, '');
 }
 
 async function onDebugFunction() {
