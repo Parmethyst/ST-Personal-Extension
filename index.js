@@ -32,17 +32,17 @@ let defaultSettings = {
   disciplinePrompt: disciplineGentlePrompt
 }
 
-// Loads the extension settings if they exist, otherwise initializes them to the defaults.
-async function loadSettings() {
-  //Create the settings if they don't exist
-  extension_settings[extensionName] = extension_settings[extensionName] || {};
-  if (Object.keys(extension_settings[extensionName]).length === 0) {
-    Object.assign(extension_settings[extensionName], defaultSettings);
-  }
+// // Loads the extension settings if they exist, otherwise initializes them to the defaults.
+// async function loadSettings() {
+//   //Create the settings if they don't exist
+//   extension_settings[extensionName] = extension_settings[extensionName] || {};
+//   if (Object.keys(extension_settings[extensionName]).length === 0) {
+//     Object.assign(extension_settings[extensionName], defaultSettings);
+//   }
 
-  // Updating settings in the UI
-  //$("#example_setting").prop("checked", extension_settings[extensionName].example_setting).trigger("input");
-}
+//   // Updating settings in the UI
+//   //$("#example_setting").prop("checked", extension_settings[extensionName].example_setting).trigger("input");
+// }
 
 // // Start a Pomodoro work session
 // function startPomodoro() {
@@ -143,12 +143,12 @@ jQuery(async () => {
   // Append settingsHtml to extensions_settings
   // extension_settings and extensions_settings2 are the left and right columns of the settings menu
   // Left should be extensions that deal with system functions and right should be visual/UI related 
-  $("#extensions_settings").append(settingsHtml);
+  //$("#extensions_settings").append(settingsHtml);
 
   // These are examples of listening for events
   // $("#my_button").on("click", onButtonClick);
   // $("#example_setting").on("input", onExampleInput);
   //$("debug_button").on("click", onDebugFunction);
   // Load settings when starting things up (if you have any)
-  loadSettings();
+  //loadSettings();
 });
