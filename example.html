@@ -1,82 +1,69 @@
-<div class="pomodoro-settings">
-    <div class="inline-drawer">
-        <div class="inline-drawer-toggle inline-drawer-header" title="Personal pomodoro settings.">
-            <b>Personal Pomodoro</b>
-            <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
-        </div>
-
-        <div class="inline-drawer-content">
-            <div class="flex-container">
-                <input id="pomodoro_enabled" type="checkbox"
-                    title="Toggle to enable or disable the Pomodoro feature." />
-                <label for="pomodoro_enabled">Enabled</label>
-            </div>
-            <div class="flex-container">
-                <input id="start_pomodoro" class="menu_button" type="submit" value="Start" />
-                <input id="pause_pomodoro" class="menu_button" type="submit" value="Pause" />
-                <input id="stop_pomodoro" class="menu_button" type="submit" value="Stop" />
-            </div>
-            <div class="flex-container">
-                <input id="pomodoro_session" class="text_pole widthUnset" type="number" min="0" max="10" step="1"
-                    title="The number of times the pomodoro session (Work + Break) will be run." />
-                <label for="pomodoro_session">Pomodoro Sessions</label>
-            </div>
-            <div class="flex-container">
-                <input id="pomodoro_work_min" class="text_pole widthUnset" type="number" min="0" max="60" step="1"
-                    title="Work duration in minutes." />
-                <label for="pomodoro_work_min">Work Length (minutes)</label>
-            </div>
-            <div class="flex-container">
-                <input id="pomodoro_break_min" class="text_pole widthUnset" type="number" min="0" max="30" step="1"
-                    title="Break duration in minutes." />
-                <label for="pomodoro_break_min">Break Length (minutes)</label>
-            </div>
-            <div class="flex-container">
-                <label for="start_work_prompt">Start Work Session Prompt</label>
-                <textarea id="start_work_prompt" class="text_pole textarea_compact" rows="6"
-                    title="The prompts to be sent when a work session started."></textarea>
-            </div>
-            <div class="flex-container">
-                <label for="break_prompt">Break Time Prompt</label>
-                <textarea id="break_prompt" class="text_pole textarea_compact" rows="6"
-                    title="The prompts to be sent when break started."></textarea>
-            </div>
-            <div class="flex-container">
-                <label for="session_finished_prompt">Pomodoro Finished Prompt</label>
-                <textarea id="session_finished_prompt" class="text_pole textarea_compact" rows="6"
-                    title="The prompt to be sent on completed pomodoro."></textarea>
-            </div>
-            <div class="flex-container">
-                <input id="discipline_toggle" type="checkbox"
-                    title="Make responses when pomodoro is running to be strict." />
-                <label for="discipline_toggle">Enable Discipline Mode</label>
-            </div>
-            <div class="flex-container">
-                <label for="discipline_prompt">Discipline Prompt</label>
-                <textarea id="discipline_prompt" class="text_pole textarea_compact" rows="6"
-                    title="Prompt to send to AI when they chat with AI assuming distracted."></textarea>
-            </div>
-            <div class="flex-container">
-                <label for="discipline_level">Discipline Level</label>
-                <select id="discipline_level" class="text_pole"
-                    title="Determines how strict is the discipline mode.">
-                    <option value="gentle">Gentle</option>
-                    <option value="firm">Firm</option>
-                    <option value="strict">Strict</option>
-                </select>
-            </div>
-            <div class="flex-container">
-                <input id="include_prompt" type="checkbox"
-                    title="Indicates if the idle prompting should be included in context. (Sends as user)" />
-                <label for="include_prompt">Include Idle Prompt</label>
-            </div>
-            <div class="flex-container">
-                <input id="save_settings" class="menu_button" type="submit" value="Save Settings" />
-            </div>
-            <div class="flex-container">
-                <input id="debug_button" class="menu_button" type="submit" value="Debug Button" />
-            </div>
-            <hr class="sysHR" />
-        </div>
+<div class="idle-settings">
+  <div class="inline-drawer">
+    <div class="inline-drawer-toggle inline-drawer-header" title="Indicates the settings for the idle feature.">
+      <b>Idle</b>
+      <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
     </div>
+
+    <div class="inline-drawer-content">
+      <div class="idle_block flex-container">
+        <input id="idle_enabled" type="checkbox" title="Toggle to enable or disable the idle feature." />
+        <label for="idle_enabled">Enabled</label>
+      </div>
+      <div class="idle_block flex-container">
+        <input id="idle_repeats" class="text_pole widthUnset" type="number" min="0" max="100000" step="1" title="The number of times the idle action will be prompted." />
+        <label for="idle_repeats">Idle Prompt Count</label>
+      </div>
+      <div class="idle_block flex-container" style="display: none;">
+        <input id="idle_timer_min" class="text_pole widthUnset" type="number" min="0" max="600000" step="1" title="The minimum amount of time in seconds before the idle action is triggered." />
+        <label for="idle_timer_min">Idle Timer Minimum (seconds)</label>
+      </div>
+      <div class="idle_block flex-container">
+        <input id="idle_timer" class="text_pole widthUnset" type="number" min="0" max="600000" step="1" title="The amount of time in seconds before the idle action is triggered." />
+        <label for="idle_timer">Idle Timer (seconds)</label>
+      </div>
+      <div class="idle_block flex-container">
+        <label for="idle_prompts">Idle Prompts</label>
+        <textarea id="idle_prompts" class="text_pole textarea_compact" rows="6" title="The prompts to be sent to initial the idle reply (newline seperated)."></textarea>
+      </div>
+      <div class="idle_block flex-container">
+        <input id="idle_use_continuation" type="checkbox" title="Indicates whether the idle action will just use the 'Continue' function instead of a prompt." />
+        <label for="idle_use_continuation">Use Continuation</label>
+      </div>
+      <div class="idle_block flex-container">
+        <input type="checkbox" id="idle_use_regenerate" title="Indicates whether the idle action will use the 'Regenerate' function.">
+        <label for="idle_use_regenerate">Use Regenerate</label>
+      </div>
+      <div class="idle_block flex-container">
+        <input type="checkbox" id="idle_use_swipe" title="Indicates whether the idle action will use the 'Swipe' function.">
+        <label for="idle_use_swipe">Use Regenerate with history (aka Swipe)</label>
+      </div>
+      <div class="idle_block flex-container">
+        <input id="idle_use_impersonation" type="checkbox" title="Indicates whether the idle action will use the 'Impersonate' function." />
+        <label for="idle_use_impersonation">Use Impersonation</label>
+      </div>
+      <div class="idle_block mutually_exclusive_warning">
+        (Continuation, Regenerate, Swipe, and Impersonation are mutually exclusive)
+      </div>
+      <div class="idle_block flex-container">
+        <input id="idle_random_time" type="checkbox" title="Indicates if the idle time should be randomized between a min/max value." />
+        <label for="idle_random_time">Randomize Time</label>
+      </div>
+      <div class="idle_block flex-container">
+        <input id="idle_include_prompt" type="checkbox" title="Indicates if the idle prompting should be included in context. (Sends as user)" />
+        <label for="idle_include_prompt">Include Idle Prompt</label>
+      </div>
+      <div class="idle_block flex-container">
+        <label for="idle_sendAs">Send As</label>
+        <select id="idle_sendAs" class="text_pole" title="Determines how the idle message prompting is sent; as a user, character, system, or raw message.">
+          <option value="user">User</option>
+          <option value="char">Character</option>
+          <option value="sys">System</option>
+          <option value="raw">Raw</option>
+        </select>
+      </div>
+
+      <hr class="sysHR" />
+    </div>
+  </div>
 </div>
