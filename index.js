@@ -13,23 +13,23 @@ const { generateQuietPrompt } = SillyTavern.getContext();
 const extensionName = "ST-Personal-Extension";
 const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
 const extensionSettings = extension_settings[extensionName];
-
-const defaultSettings = {
-  enabled: false,
-  sessionQty: 4,
-  workDuration: 25,
-  breakDuration: 5,
-  disciplineMode: false,
-  disciplineLevel: "gentle",
-  includePrompt: false,
-  workStartPrompt: "The user is beginning a Pomodoro work session. Offer an encouraging, motivating message that sets a focused and positive tone.",
-  breakStartPrompt: "The user has finished a Pomodoro work session and is starting a short break. Suggest relaxing or refreshing activities in a warm, supportive way.",
-  pomodoroFinishedPrompt: "The user has completed all Pomodoro cycles. Celebrate their discipline and progress with a cheerful, rewarding message.",
-  disciplineGentlePrompt: "Respond with a soft, encouraging reminder to stay focused, but remain kind and supportive.",
-  disciplineFirmPrompt: "Respond with clear, motivational pushback. Remind the user strongly to stay on task, but keep tone constructive.",
-  disciplineStrictPrompt: "Respond with strong enforcement, like a coach. Be direct and uncompromising, telling the user to stop chatting and return to work immediately.",
-  disciplinePrompt: disciplineGentlePrompt
-};
+const defaultSettings = {}
+// const defaultSettings = {
+//   enabled: false,
+//   sessionQty: 4,
+//   workDuration: 25,
+//   breakDuration: 5,
+//   disciplineMode: false,
+//   disciplineLevel: "gentle",
+//   includePrompt: false,
+//   workStartPrompt: "The user is beginning a Pomodoro work session. Offer an encouraging, motivating message that sets a focused and positive tone.",
+//   breakStartPrompt: "The user has finished a Pomodoro work session and is starting a short break. Suggest relaxing or refreshing activities in a warm, supportive way.",
+//   pomodoroFinishedPrompt: "The user has completed all Pomodoro cycles. Celebrate their discipline and progress with a cheerful, rewarding message.",
+//   disciplineGentlePrompt: "Respond with a soft, encouraging reminder to stay focused, but remain kind and supportive.",
+//   disciplineFirmPrompt: "Respond with clear, motivational pushback. Remind the user strongly to stay on task, but keep tone constructive.",
+//   disciplineStrictPrompt: "Respond with strong enforcement, like a coach. Be direct and uncompromising, telling the user to stop chatting and return to work immediately.",
+//   disciplinePrompt: disciplineGentlePrompt
+// };
 
 const secondsConversion = 60;
 
