@@ -189,7 +189,7 @@ async function generateTextWithPrompt(prompt_string) {
 }
 
 globalThis.disciplinePromptInjector = async function(chat, contextSize, abort, type) {
-    if (currentCycleType == stoppedPomodoroType || timerInterval === null)
+    if (currentCycleType == stoppedPomodoroType || timerInterval === null) return
 
     let pomodoro_injection = `[Discipline Mode] The user is in a Pomodoro work session. 
       - If their message is casual, unrelated to the current task, or small talk: ${runtimeSettings.disciplineCurrentPrompt}
