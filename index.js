@@ -96,30 +96,36 @@ function intializeNewInterval(new_time_val) {
         } else {
             clearInterval(timerInterval);
             timerInterval = null;
-            if (currentSessionCount < runtimeSettings.sessionQty) {
-              if (currentCycleType == workPomodoroType) {
-                startPomodoroBreak()
-              }
-              else if (currentCycleType == breakPomodoroType) {
-                startPomodoroWork()
-                currentSessionCount += 1
-              }
-              else if (currentCycleType == stoppedPomodoroType) {
-                startPomodoroWork()
-              }
-              else {
-                onStopTimer()
-              }
-            }
-            else {
-              toastr.info(
-                "[Information]",
-                "Pomodoro Finished!"
-              );
-              onStopTimer()
-            }
+            checkPomodoroContinuity()
         }
     }, 1000);
+}
+
+function checkPomodoroContinuity() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  if (currentSessionCount < runtimeSettings.sessionQty) {
+    if (currentCycleType == workPomodoroType) {
+      startPomodoroBreak()
+    }
+    else if (currentCycleType == breakPomodoroType) {
+      startPomodoroWork()
+      currentSessionCount += 1
+    }
+    else if (currentCycleType == stoppedPomodoroType) {
+      startPomodoroWork()
+    }
+    else {
+      onStopTimer()
+    }
+  }
+  else {
+    toastr.info(
+      "[Information]",
+      "Pomodoro Finished!"
+    );
+    onStopTimer()
+  }
 }
 
 function startPomodoroWork() {
