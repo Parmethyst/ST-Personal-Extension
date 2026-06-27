@@ -109,7 +109,8 @@ function onButtonClick() {
 // }
 
 async function generateTextWithPrompt(prompt_string) {
-  sendLoud('sys', prompt_string)
+  const response = await generateQuietPrompt(prompt_string)
+  sendMessageAs(getContext().name2, response)
 }
 
 async function onDebugFunction() {
