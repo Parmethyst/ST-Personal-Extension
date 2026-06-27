@@ -1,6 +1,7 @@
 {
     "display_name": "ST-Personal-Extension",
     "loading_order": 9,
+    "generate_interceptor": "disciplinePromptInjector",
     "requires": [],
     "optional": [],
     "js": "index.js",

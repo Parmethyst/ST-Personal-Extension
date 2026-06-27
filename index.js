@@ -112,6 +112,7 @@ function checkPomodoroContinuity() {
 }
 
 function startPomodoroWork() {
+  if (timerInterval) return
   toastr.info(
     "[Information]",
     "Start Pomodoro, stay focused!"
@@ -185,6 +186,28 @@ function onDisciplineLevelChanged(val) {
 async function generateTextWithPrompt(prompt_string) {
   const response = await generateQuietPrompt(prompt_string);
   sendMessageAs(getContext().name2, response);
+}
+
+globalThis.disciplinePromptInjector = async function(chat, contextSize, abort, type) {
+    if (currentCycleType == stoppedPomodoroType || timerInterval === null)
+
+    let pomodoro_injection = `[Discipline Mode] The user is in a Pomodoro work session. 
+      - If their message is casual, unrelated to the current task, or small talk: ${runtimeSettings.disciplineCurrentPrompt}
+      - If their message is directly related to their work or task: respond normally and provide assistance, but keep replies concise and task‑focused.`
+    
+    if (currentCycleType == breakPomodoroType) {
+      pomodoro_injection = `The user is currently in a break defined by the Pomodoro Timer (${runtimeSettings.breakDuration} minutes)`
+    }
+    
+    const injection = {
+        is_user: false,
+        name: "System Note",
+        send_date: Date.now(),
+        mes: pomodoro_injection
+    };
+
+    // Insert before the last user message
+    chat.splice(chat.length - 1, 0, injection);
 }
 
 // This function is called when the extension is loaded
