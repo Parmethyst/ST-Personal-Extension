@@ -19,7 +19,6 @@ const defaultSettings = {
   breakDuration: 5,
   disciplineMode: false,
   disciplineLevel: "gentle",
-  includePrompt: false,
   workStartPrompt: "The user is beginning a Pomodoro work session. Offer an encouraging, motivating message that sets a focused and positive tone.",
   breakStartPrompt: "The user has finished a Pomodoro work session and is starting a short break. Suggest relaxing or refreshing activities in a warm, supportive way.",
   pomodoroFinishedPrompt: "The user has completed all Pomodoro cycles. Celebrate their discipline and progress with a cheerful, rewarding message.",
