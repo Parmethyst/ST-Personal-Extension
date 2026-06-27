@@ -239,7 +239,7 @@ jQuery(async () => {
   // $("#my_button").on("click", onButtonClick);
   // $("#example_setting").on("input", onExampleInput);
   $("#debug_button").on("click", onDebugFunction);
-  $("#start_pomodoro").on("click", onStartTimer);
+  $("#start_pomodoro").on("click", startPomodoroWork);
   $("#stop_pomodoro").on("click", onStopTimer);
   $("#discipline_level").on('change', function() {
     let selectedValue = $(this).val();
