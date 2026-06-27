@@ -170,6 +170,7 @@ function onResetSettingsToDefault() {
 }
 
 function onDisciplineLevelChanged(val) {
+  alert(selectedValue)
   switch (val) {
     case "gentle":
       $("#discipline_prompt").val(disciplineGentlePrompt)
@@ -224,7 +225,6 @@ jQuery(async () => {
   $("#stop_pomodoro").on("click", onStopTimer);
   $("#discipline_level").on("change", function() {
     let selectedValue = $(this).val();
-    alert(selectedValue)
     onDisciplineLevelChanged(selectedValue);
   });
   $("#save_settings").on("click", onSaveSettings)
