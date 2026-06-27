@@ -60,8 +60,6 @@ async function loadSettings() {
   }
   runtimeSettings = extensionSettings[extensionName]
   onReadySetupUI()
-  // Updating settings in the UI
-  $("#example_setting").prop("checked", extension_settings[extensionName].example_setting).trigger("input");
 }
 
 function updateTimerDisplay() {
@@ -71,20 +69,6 @@ function updateTimerDisplay() {
     $("#timer_label").text(
         `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
     );
-}
-
-function onStartTimer() {
-    if (timerInterval) return; // Prevent multiple intervals
-    timerInterval = setInterval(() => {
-        if (remainingTime > 0) {
-            remainingTime--;
-            updateTimerDisplay();
-        } else {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            alert("Pomodoro finished!");
-        }
-    }, 1000);
 }
 
 function intializeNewInterval(new_time_val) {
@@ -105,15 +89,14 @@ function checkPomodoroContinuity() {
   clearInterval(timerInterval);
   timerInterval = null;
   if (currentSessionCount < runtimeSettings.sessionQty) {
-    if (currentCycleType == workPomodoroType) {
+    if (currentCycleType == workPomodoroType || currentCycleType == stoppedPomodoroType) {
       startPomodoroBreak()
     }
     else if (currentCycleType == breakPomodoroType) {
-      startPomodoroWork()
       currentSessionCount += 1
-    }
-    else if (currentCycleType == stoppedPomodoroType) {
-      startPomodoroWork()
+      if (currentSessionCount < runtimeSettings.sessionQty) {
+        startPomodoroWork()
+      }
     }
     else {
       onStopTimer()
@@ -155,13 +138,6 @@ function onStopTimer() {
     currentSessionCount = 0
     currentCycleType = stoppedPomodoroType
     updateTimerDisplay();
-}
-
-// This function is called when the extension settings are changed in the UI
-function onExampleInput(event) {
-  const value = Boolean($(event.target).prop("checked"));
-  extension_settings[extensionName].example_setting = value;
-  saveSettingsDebounced();
 }
 
 function onSaveSettings() {
@@ -206,26 +182,9 @@ function onDisciplineLevelChanged(val) {
   }
 }
 
-// This function is called when the button is clicked
-function onButtonClick() {
-  // You can do whatever you want here
-  // Let's make a popup appear with the checked setting
-  toastr.info(
-    `The checkbox is ${extension_settings[extensionName].example_setting ? "checked" : "not checked"}`,
-    "A popup appeared because you clicked the button!"
-  );
-}
-
 async function generateTextWithPrompt(prompt_string) {
   const response = await generateQuietPrompt(prompt_string);
   sendMessageAs(getContext().name2, response);
-}
-
-function onDebugFunction() {
-  generateTextWithPrompt("Tell me a joke");
-  toastr.info(
-    "A popup appeared because you clicked the button!"
-  );
 }
 
 // This function is called when the extension is loaded
@@ -238,17 +197,11 @@ jQuery(async () => {
   // Left should be extensions that deal with system functions and right should be visual/UI related 
   $("#extensions_settings").append(settingsHtml);
 
-  // These are examples of listening for events
-  $("#my_button").on("click", onButtonClick);
-  $("#example_setting").on("input", onExampleInput);
-
-  // $("#my_button").on("click", onButtonClick);
-  // $("#example_setting").on("input", onExampleInput);
-  $("#debug_button").on("click", onDebugFunction);
   $("#start_pomodoro").on("click", startPomodoroWork);
   $("#stop_pomodoro").on("click", onStopTimer);
-  $("#discipline_level").on('change', function() {
+  $("#discipline_level").on("change", function() {
     let selectedValue = $(this).val();
+    alert(selectedValue)
     onDisciplineLevelChanged(selectedValue);
   });
   $("#save_settings").on("click", onSaveSettings)
