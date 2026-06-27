@@ -170,16 +170,15 @@ function onResetSettingsToDefault() {
 }
 
 function onDisciplineLevelChanged(val) {
-  alert(selectedValue)
   switch (val) {
     case "gentle":
-      $("#discipline_prompt").val(disciplineGentlePrompt)
+      $("#discipline_prompt").val(defaultSettings.disciplineGentlePrompt)
       break;
     case "firm":
-      $("#discipline_prompt").val(disciplineFirmPrompt)
+      $("#discipline_prompt").val(defaultSettings.disciplineFirmPrompt)
       break;
     case "strict":
-      $("#discipline_prompt").val(disciplineStrictPrompt)
+      $("#discipline_prompt").val(defaultSettings.disciplineStrictPrompt)
       break;
   }
 }
