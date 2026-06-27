@@ -13,8 +13,30 @@ const { generateQuietPrompt } = SillyTavern.getContext();
 const extensionName = "ST-Personal-Extension";
 const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
 const extensionSettings = extension_settings[extensionName];
-const defaultSettings = {};
 
+const defaultSettings = {
+  enabled: false,
+  sessionQty: 4,
+  workDuration: 25,
+  breakDuration: 5,
+  disciplineMode: false,
+  disciplineLevel: "gentle",
+  includePrompt: false,
+  workStartPrompt: "The user is beginning a Pomodoro work session. Offer an encouraging, motivating message that sets a focused and positive tone.",
+  breakStartPrompt: "The user has finished a Pomodoro work session and is starting a short break. Suggest relaxing or refreshing activities in a warm, supportive way.",
+  pomodoroFinishedPrompt: "The user has completed all Pomodoro cycles. Celebrate their discipline and progress with a cheerful, rewarding message.",
+  disciplineGentlePrompt: "Respond with a soft, encouraging reminder to stay focused, but remain kind and supportive.",
+  disciplineFirmPrompt: "Respond with clear, motivational pushback. Remind the user strongly to stay on task, but keep tone constructive.",
+  disciplineStrictPrompt: "Respond with strong enforcement, like a coach. Be direct and uncompromising, telling the user to stop chatting and return to work immediately.",
+  disciplinePrompt: disciplineGentlePrompt
+}
+
+const secondsConversion = 60
+
+let timerDuration = 25 * secondsConversion; // 25 minutes in seconds
+let breakTimer = 5 * secondsConversion;
+let remainingTime = timerDuration;
+let timerInterval = null;
 
  
 // Loads the extension settings if they exist, otherwise initializes them to the defaults.
@@ -27,6 +49,36 @@ async function loadSettings() {
 
   // Updating settings in the UI
   $("#example_setting").prop("checked", extension_settings[extensionName].example_setting).trigger("input");
+}
+
+function updateTimerDisplay() {
+    let minutes = Math.floor(remainingTime / 60);
+    let seconds = remainingTime % 60;
+    // Update HTML label with jQuery
+    $("#timer_label").text(
+        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+    );
+}
+
+function onStartTimer() {
+    if (timerInterval) return; // Prevent multiple intervals
+    timerInterval = setInterval(() => {
+        if (remainingTime > 0) {
+            remainingTime--;
+            updateTimerDisplay();
+        } else {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            alert("Pomodoro finished!");
+        }
+    }, 1000);
+}
+
+function onStopTimer() {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    remainingTime = timerDuration; // Reset to full duration
+    updateTimerDisplay();
 }
 
 // This function is called when the extension settings are changed in the UI
@@ -113,33 +165,11 @@ async function generateTextWithPrompt(prompt_string) {
   sendMessageAs(getContext().name2, response)
 }
 
-async function onDebugFunction() {
+function onDebugFunction() {
   generateTextWithPrompt("Tell me a joke")
   toastr.info(
     "A popup appeared because you clicked the button!"
   );
-}
-
-function sendLoud(sendAs, prompt) {
-    if (sendAs === 'user') {
-        prompt = substituteParams(prompt);
-
-        $('#send_textarea').val(prompt);
-
-        // Set the focus back to the textarea
-        $('#send_textarea').focus();
-
-        $('#send_but').trigger('click');
-    } else if (sendAs === 'char') {
-        sendMessageAs('', `${getContext().name2}\n${prompt}`);
-        promptQuietForLoudResponse(sendAs, '');
-    } else if (sendAs === 'sys') {
-        sendNarratorMessage('', prompt);
-        promptQuietForLoudResponse(sendAs, '');
-    }
-    else {
-        console.error(`Unknown sendAs value: ${sendAs}`);
-    }
 }
 
 //   // Helper to inject event prompts into chat
@@ -168,6 +198,8 @@ jQuery(async () => {
   // $("#my_button").on("click", onButtonClick);
   // $("#example_setting").on("input", onExampleInput);
   $("#debug_button").on("click", onDebugFunction);
+  $("#start_pomodoro").on("click", onStartTimer);
+  $("#stop_pomodoro").on("click", onStartTimer);
   // Load settings when starting things up (if you have any)
   loadSettings();
 });
