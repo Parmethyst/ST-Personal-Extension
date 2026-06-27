@@ -173,12 +173,15 @@ function onDisciplineLevelChanged(val) {
   switch (val) {
     case "gentle":
       $("#discipline_prompt").val(defaultSettings.disciplineGentlePrompt)
+      runtimeSettings.disciplineCurrentPrompt = defaultSettings.disciplineGentlePrompt
       break;
     case "firm":
       $("#discipline_prompt").val(defaultSettings.disciplineFirmPrompt)
+      runtimeSettings.disciplineCurrentPrompt = defaultSettings.disciplineFirmPrompt
       break;
     case "strict":
       $("#discipline_prompt").val(defaultSettings.disciplineStrictPrompt)
+      runtimeSettings.disciplineCurrentPrompt = defaultSettings.disciplineStrictPrompt
       break;
   }
 }
