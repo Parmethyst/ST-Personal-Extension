@@ -40,6 +40,7 @@ let currentCycleType = stoppedPomodoroType
 let timerInterval = null;
  
 function onReadySetupUI() {
+  $("#session_qty").val(runtimeSettings.sessionQty )
   $("#work_minutes").val(runtimeSettings.workDuration)
   $("#break_minutes").val(runtimeSettings.breakDuration)
   $("#start_work_prompt").val(runtimeSettings.workStartPrompt)
@@ -110,6 +111,13 @@ function intializeNewInterval(new_time_val) {
                 onStopTimer()
               }
             }
+            else {
+              toastr.info(
+                "[Information]",
+                "Pomodoro Finished!"
+              );
+              onStopTimer()
+            }
         }
     }, 1000);
 }
@@ -151,15 +159,20 @@ function onExampleInput(event) {
 }
 
 function onSaveSettings() {
-  runtimeSettings.workDuration = $("#work_minutes").val(runtimeSettings.workDuration)
-  runtimeSettings.breakDuration = $("#break_minutes").val(runtimeSettings.breakDuration)
-  runtimeSettings.workStartPrompt = $("#start_work_prompt").val(runtimeSettings.workStartPrompt)
-  runtimeSettings.breakStartPrompt = $("#break_prompt").val(runtimeSettings.breakStartPrompt)
-  runtimeSettings.disciplineMode = $("#discipline_toggle").prop("checked", runtimeSettings.disciplineMode).trigger("input");
-  runtimeSettings.disciplineLevel = $("#discipline_level").val(runtimeSettings.disciplineLevel)
+  runtimeSettings.sessionQty = $("#session_qty").val()
+  runtimeSettings.workDuration = $("#work_minutes").val()
+  runtimeSettings.breakDuration = $("#break_minutes").val()
+  runtimeSettings.workStartPrompt = $("#start_work_prompt").val()
+  runtimeSettings.breakStartPrompt = $("#break_prompt").val()
+  runtimeSettings.disciplineMode = $("#discipline_toggle").prop("checked");
+  runtimeSettings.disciplineLevel = $("#discipline_level").val()
   runtimeSettings.disciplineCurrentPrompt = $("#discipline_prompt").val()
   extensionSettings[extensionName] = runtimeSettings
   saveSettingsDebounced()
+  toastr.info(
+    "[Information]",
+    "Settings saved!!"
+  );
 }
 
 function onResetSettingsToDefault() {
@@ -167,6 +180,10 @@ function onResetSettingsToDefault() {
   runtimeSettings = defaultSettings
   onReadySetupUI()
   saveSettingsDebounced()
+  toastr.info(
+    "[Information]",
+    "Settings Reset!"
+  );
 }
 
 function onDisciplineLevelChanged(val) {
