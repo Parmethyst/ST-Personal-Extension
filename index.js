@@ -29,9 +29,9 @@ const defaultSettings = {
   disciplineFirmPrompt: "Respond with clear, motivational pushback. Remind the user strongly to stay on task, but keep tone constructive.",
   disciplineStrictPrompt: "Respond with strong enforcement, like a coach. Be direct and uncompromising, telling the user to stop chatting and return to work immediately.",
   disciplinePrompt: disciplineGentlePrompt
-}
+};
 
-const secondsConversion = 60
+const secondsConversion = 60;
 
 let timerDuration = 25 * secondsConversion; // 25 minutes in seconds
 let breakTimer = 5 * secondsConversion;
@@ -161,12 +161,12 @@ function onButtonClick() {
 // }
 
 async function generateTextWithPrompt(prompt_string) {
-  const response = await generateQuietPrompt(prompt_string)
-  sendMessageAs(getContext().name2, response)
+  const response = await generateQuietPrompt(prompt_string);
+  sendMessageAs(getContext().name2, response);
 }
 
 function onDebugFunction() {
-  generateTextWithPrompt("Tell me a joke")
+  generateTextWithPrompt("Tell me a joke");
   toastr.info(
     "A popup appeared because you clicked the button!"
   );
@@ -199,7 +199,7 @@ jQuery(async () => {
   // $("#example_setting").on("input", onExampleInput);
   $("#debug_button").on("click", onDebugFunction);
   $("#start_pomodoro").on("click", onStartTimer);
-  $("#stop_pomodoro").on("click", onStartTimer);
+  $("#stop_pomodoro").on("click", onStopTimer);
   // Load settings when starting things up (if you have any)
   loadSettings();
 });
