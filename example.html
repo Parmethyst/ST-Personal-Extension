@@ -15,11 +15,6 @@
                 <label for="example_setting">This is an example</label>
             </div>
             <div class="flex-container">
-                <input id="pomodoro_enabled" type="checkbox"
-                    title="Toggle to enable or disable the Pomodoro feature." />
-                <label for="pomodoro_enabled">Enabled</label>
-            </div>
-            <div class="flex-container">
                 <h1 id="timer_label">25:00</h1>
             </div>
             <div class="flex-container">
@@ -27,19 +22,19 @@
                 <input id="stop_pomodoro" class="menu_button" type="submit" value="Stop" />
             </div>
             <div class="flex-container">
-                <input id="pomodoro_session" class="text_pole widthUnset" type="number" min="0" max="10" step="1"
+                <input id="session_qty" class="text_pole widthUnset" type="number" min="0" max="10" step="1"
                     title="The number of times the pomodoro session (Work + Break) will be run." />
-                <label for="pomodoro_session">Pomodoro Sessions</label>
+                <label for="session_qty">Pomodoro Sessions</label>
             </div>
             <div class="flex-container">
-                <input id="pomodoro_work_min" class="text_pole widthUnset" type="number" min="0" max="60" step="1"
+                <input id="work_minutes" class="text_pole widthUnset" type="number" min="0" max="60" step="1"
                     title="Work duration in minutes." />
-                <label for="pomodoro_work_min">Work Length (minutes)</label>
+                <label for="work_minutes">Work Length (minutes)</label>
             </div>
             <div class="flex-container">
-                <input id="pomodoro_break_min" class="text_pole widthUnset" type="number" min="0" max="30" step="1"
+                <input id="break_minutes" class="text_pole widthUnset" type="number" min="0" max="30" step="1"
                     title="Break duration in minutes." />
-                <label for="pomodoro_break_min">Break Length (minutes)</label>
+                <label for="break_minutes">Break Length (minutes)</label>
             </div>
             <div class="flex-container">
                 <label for="start_work_prompt">Start Work Session Prompt</label>
@@ -76,12 +71,8 @@
                 </select>
             </div>
             <div class="flex-container">
-                <input id="include_prompt" type="checkbox"
-                    title="Indicates if the idle prompting should be included in context. (Sends as user)" />
-                <label for="include_prompt">Include Idle Prompt</label>
-            </div>
-            <div class="flex-container">
                 <input id="save_settings" class="menu_button" type="submit" value="Save Settings" />
+                <input id="reset_settings" class="menu_button" type="submit" value="Reset to Default" />
             </div>
             <div class="flex-container">
                 <input id="debug_button" class="menu_button" type="submit" value="Debug Button" />

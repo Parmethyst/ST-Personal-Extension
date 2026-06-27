@@ -13,32 +13,43 @@ const { generateQuietPrompt } = SillyTavern.getContext();
 const extensionName = "ST-Personal-Extension";
 const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
 const extensionSettings = extension_settings[extensionName];
-const defaultSettings = {}
-// const defaultSettings = {
-//   enabled: false,
-//   sessionQty: 4,
-//   workDuration: 25,
-//   breakDuration: 5,
-//   disciplineMode: false,
-//   disciplineLevel: "gentle",
-//   includePrompt: false,
-//   workStartPrompt: "The user is beginning a Pomodoro work session. Offer an encouraging, motivating message that sets a focused and positive tone.",
-//   breakStartPrompt: "The user has finished a Pomodoro work session and is starting a short break. Suggest relaxing or refreshing activities in a warm, supportive way.",
-//   pomodoroFinishedPrompt: "The user has completed all Pomodoro cycles. Celebrate their discipline and progress with a cheerful, rewarding message.",
-//   disciplineGentlePrompt: "Respond with a soft, encouraging reminder to stay focused, but remain kind and supportive.",
-//   disciplineFirmPrompt: "Respond with clear, motivational pushback. Remind the user strongly to stay on task, but keep tone constructive.",
-//   disciplineStrictPrompt: "Respond with strong enforcement, like a coach. Be direct and uncompromising, telling the user to stop chatting and return to work immediately.",
-//   disciplinePrompt: disciplineGentlePrompt
-// };
+const defaultSettings = {
+  sessionQty: 4,
+  workDuration: 25,
+  breakDuration: 5,
+  disciplineMode: false,
+  disciplineLevel: "gentle",
+  includePrompt: false,
+  workStartPrompt: "The user is beginning a Pomodoro work session. Offer an encouraging, motivating message that sets a focused and positive tone.",
+  breakStartPrompt: "The user has finished a Pomodoro work session and is starting a short break. Suggest relaxing or refreshing activities in a warm, supportive way.",
+  pomodoroFinishedPrompt: "The user has completed all Pomodoro cycles. Celebrate their discipline and progress with a cheerful, rewarding message.",
+  disciplineGentlePrompt: "Respond with a soft, encouraging reminder to stay focused, but remain kind and supportive.",
+  disciplineFirmPrompt: "Respond with clear, motivational pushback. Remind the user strongly to stay on task, but keep tone constructive.",
+  disciplineStrictPrompt: "Respond with strong enforcement, like a coach. Be direct and uncompromising, telling the user to stop chatting and return to work immediately.",
+  disciplineCurrentPrompt: "Respond with a soft, encouraging reminder to stay focused, but remain kind and supportive."
+};
 
-const secondsConversion = 60;
+const stoppedPomodoroType = "stopped"
+const workPomodoroType = "work"
+const breakPomodoroType = "break"
 
-let timerDuration = 25 * secondsConversion; // 25 minutes in seconds
-let breakTimer = 5 * secondsConversion;
-let remainingTime = timerDuration;
+let runtimeSettings = defaultSettings
+let remainingTime = runtimeSettings.workDuration;
+let currentSessionCount = 0
+let currentCycleType = stoppedPomodoroType
 let timerInterval = null;
-
  
+function onReadySetupUI() {
+  $("#work_minutes").val(runtimeSettings.workDuration)
+  $("#break_minutes").val(runtimeSettings.breakDuration)
+  $("#start_work_prompt").val(runtimeSettings.workStartPrompt)
+  $("#break_prompt").val(runtimeSettings.breakStartPrompt)
+  $("#session_finished_prompt").val(runtimeSettings.breakStartPrompt)
+  $("#discipline_toggle").prop("checked", runtimeSettings.disciplineMode).trigger("input");
+  $("#discipline_level").val(runtimeSettings.disciplineLevel)
+  $("#discipline_prompt").val(runtimeSettings.disciplineCurrentPrompt)
+}
+
 // Loads the extension settings if they exist, otherwise initializes them to the defaults.
 async function loadSettings() {
   //Create the settings if they don't exist
@@ -46,7 +57,8 @@ async function loadSettings() {
   if (Object.keys(extension_settings[extensionName]).length === 0) {
     Object.assign(extension_settings[extensionName], defaultSettings);
   }
-
+  runtimeSettings = extensionSettings[extensionName]
+  onReadySetupUI()
   // Updating settings in the UI
   $("#example_setting").prop("checked", extension_settings[extensionName].example_setting).trigger("input");
 }
@@ -74,10 +86,60 @@ function onStartTimer() {
     }, 1000);
 }
 
+function intializeNewInterval(new_time_val) {
+    remainingTime = new_time_val * 60
+    timerInterval = setInterval(() => {
+        if (remainingTime > 0) {
+            remainingTime--;
+            updateTimerDisplay();
+        } else {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            if (currentSessionCount < runtimeSettings.sessionQty) {
+              if (currentCycleType == workPomodoroType) {
+                startPomodoroBreak()
+              }
+              else if (currentCycleType == breakPomodoroType) {
+                startPomodoroWork()
+                currentSessionCount += 1
+              }
+              else if (currentCycleType == stoppedPomodoroType) {
+                startPomodoroWork()
+              }
+              else {
+                onStopTimer()
+              }
+            }
+        }
+    }, 1000);
+}
+
+function startPomodoroWork() {
+  toastr.info(
+    "[Information]",
+    "Start Pomodoro, stay focused!"
+  );
+  intializeNewInterval(runtimeSettings.workDuration)
+  currentCycleType = workPomodoroType
+  generateTextWithPrompt(runtimeSettings.workStartPrompt)
+}
+
+function startPomodoroBreak() {
+  toastr.info(
+    "[Information]",
+    "Break time, stretch and hydrate!"
+  );
+  intializeNewInterval(runtimeSettings.breakDuration)
+  currentCycleType = breakPomodoroType
+  generateTextWithPrompt(runtimeSettings.breakStartPrompt)
+}
+
 function onStopTimer() {
     clearInterval(timerInterval);
     timerInterval = null;
-    remainingTime = timerDuration; // Reset to full duration
+    remainingTime = runtimeSettings.workDuration; // Reset to full duration
+    currentSessionCount = 0
+    currentCycleType = stoppedPomodoroType
     updateTimerDisplay();
 }
 
@@ -86,6 +148,39 @@ function onExampleInput(event) {
   const value = Boolean($(event.target).prop("checked"));
   extension_settings[extensionName].example_setting = value;
   saveSettingsDebounced();
+}
+
+function onSaveSettings() {
+  runtimeSettings.workDuration = $("#work_minutes").val(runtimeSettings.workDuration)
+  runtimeSettings.breakDuration = $("#break_minutes").val(runtimeSettings.breakDuration)
+  runtimeSettings.workStartPrompt = $("#start_work_prompt").val(runtimeSettings.workStartPrompt)
+  runtimeSettings.breakStartPrompt = $("#break_prompt").val(runtimeSettings.breakStartPrompt)
+  runtimeSettings.disciplineMode = $("#discipline_toggle").prop("checked", runtimeSettings.disciplineMode).trigger("input");
+  runtimeSettings.disciplineLevel = $("#discipline_level").val(runtimeSettings.disciplineLevel)
+  runtimeSettings.disciplineCurrentPrompt = $("#discipline_prompt").val()
+  extensionSettings[extensionName] = runtimeSettings
+  saveSettingsDebounced()
+}
+
+function onResetSettingsToDefault() {
+  extensionSettings[extensionName] = defaultSettings
+  runtimeSettings = defaultSettings
+  onReadySetupUI()
+  saveSettingsDebounced()
+}
+
+function onDisciplineLevelChanged(val) {
+  switch (val) {
+    case "gentle":
+      $("#discipline_prompt").val(disciplineGentlePrompt)
+      break;
+    case "firm":
+      $("#discipline_prompt").val(disciplineFirmPrompt)
+      break;
+    case "strict":
+      $("#discipline_prompt").val(disciplineStrictPrompt)
+      break;
+  }
 }
 
 // This function is called when the button is clicked
@@ -97,68 +192,6 @@ function onButtonClick() {
     "A popup appeared because you clicked the button!"
   );
 }
-// // Start a break
-// function startBreak() {
-//   this.pomodoroActive = false;
-//   this.injectPrompt("Break Time",
-//     "The user has finished a Pomodoro work session and is starting a short break. Suggest relaxing or refreshing activities in a warm, supportive way.");
-//   this.runTimer(this.settings.breakMinutes, () => {
-//     if (this.currentCycle < this.settings.cycles) {
-//       this.startPomodoro();
-//     } else {
-//       this.injectPrompt("Session Complete",
-//         "The user has completed all Pomodoro cycles. Celebrate their discipline and progress with a cheerful, rewarding message.");
-//     }
-//   });
-// }
-
-// // Stop Pomodoro immediately
-// function stopPomodoro() {
-//   clearTimeout(this.timer);
-//   this.pomodoroActive = false;
-//   this.injectPrompt("Pomodoro Stopped",
-//     "The user has stopped the Pomodoro session. Acknowledge this calmly and encourage them to resume later if possible.");
-// }
-
-// // Reset session progress
-// function resetSession() {
-//   clearTimeout(this.timer);
-//   this.currentCycle = 0;
-//   this.pomodoroActive = false;
-//   this.injectPrompt("Session Reset",
-//     "The Pomodoro session has been reset. Offer a supportive message to help the user restart fresh.");
-// }
-
-// // Timer runner
-// function runTimer(minutes, callback) {
-//   clearTimeout(this.timer);
-//   this.timer = setTimeout(callback, minutes * 60 * 1000);
-//   this.injectPrompt("Timer Set",
-//     `A timer has been set for ${minutes} minutes. Acknowledge this in a concise, reassuring way.`);
-// }
-
-// // Discipline hook: intercept user messages during work sessions
-// function onUserMessage(userText) {
-//   if (this.settings.disciplineMode && this.pomodoroActive) {
-//     let severityPrompt = "";
-//     switch (this.settings.disciplineSeverity) {
-//       case "gentle":
-//         severityPrompt = "Respond with a soft, encouraging reminder to stay focused, but remain kind and supportive.";
-//         break;
-//       case "firm":
-//         severityPrompt = "Respond with clear, motivational pushback. Remind the user strongly to stay on task, but keep tone constructive.";
-//         break;
-//       case "strict":
-//         severityPrompt = "Respond with strong enforcement, like a coach. Be direct and uncompromising, telling the user to stop chatting and return to work immediately.";
-//         break;
-//     }
-
-//     return `[Discipline Mode] The user is in a Pomodoro work session. 
-//       - If their message is casual, unrelated to the current task, or small talk: ${severityPrompt}
-//       - If their message is directly related to their work or task: respond normally and provide assistance, but keep replies concise and task‑focused.\n\nUser said: ${userText}`;
-//   }
-//   return userText;
-// }
 
 async function generateTextWithPrompt(prompt_string) {
   const response = await generateQuietPrompt(prompt_string);
@@ -171,15 +204,6 @@ function onDebugFunction() {
     "A popup appeared because you clicked the button!"
   );
 }
-
-//   // Helper to inject event prompts into chat
-//   injectPrompt(eventType, eventDescription) {
-//     window.addMessage({
-//       role: "user",
-//       content: `[System Event: ${eventType}] ${eventDescription}`
-//     });
-//   }
-// };
 
 // This function is called when the extension is loaded
 jQuery(async () => {
@@ -200,6 +224,12 @@ jQuery(async () => {
   $("#debug_button").on("click", onDebugFunction);
   $("#start_pomodoro").on("click", onStartTimer);
   $("#stop_pomodoro").on("click", onStopTimer);
+  $("#discipline_level").on('change', function() {
+    let selectedValue = $(this).val();
+    onDisciplineLevelChanged(selectedValue);
+  });
+  $("#save_settings").on("click", onSaveSettings)
+  $("#reset_settings").on("click", onResetSettingsToDefault)
   // Load settings when starting things up (if you have any)
   loadSettings();
 });
